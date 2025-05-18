@@ -1,0 +1,38 @@
+<mat-sidenav-container>
+  <mat-sidenav #sidenav>
+    <app-menu [sidenav]="sidenav" [isLoggedIn]="isLoggedIn" (logoutEvent)="logout()"></app-menu>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar>
+      <button mat-button (click)="onToggleSidenav(sidenav)" class="menu-toggle-button">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <div>Insurance</div>
+      <nav>
+        <ul>
+          <li><a routerLink="/home">Home</a></li>
+          @if (isLoggedIn) {
+            <li><a routerLink="/insurances">Insurances</a></li>
+          }
+
+          @if (isLoggedIn) {
+            <li><a routerLink="/expired">Active Insurances</a></li>
+          }
+
+          @if (isLoggedIn) {
+            <li><a routerLink="/profile">Profile</a></li>
+          }
+
+          @if (!isLoggedIn) {
+            <li><a routerLink="/login">Login</a></li>
+          }
+
+          @if (isLoggedIn) {
+            <li><a href="#" (click)="$event.preventDefault(); logout()">Logout</a></li>
+          }
+        </ul>
+      </nav>
+    </mat-toolbar>
+    <router-outlet />
+  </mat-sidenav-content>
+</mat-sidenav-container>

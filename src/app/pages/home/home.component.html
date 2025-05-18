@@ -1,0 +1,11 @@
+<div class="container">
+    <h1>Insurance Company</h1>
+    
+    @if (!isLoggedIn) {
+      <button mat-flat-button color="accent" [routerLink]="['/login']" class="insurances">Login</button>
+    }
+    
+    @if (isLoggedIn) {
+      <button mat-flat-button color="accent" [routerLink]="['/profile']" class="insurances">My Profile</button>
+    }
+</div>

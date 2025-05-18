@@ -1,0 +1,95 @@
+<mat-card class="insurance-card">
+  <mat-card-header>
+    <mat-card-title>{{ title }}</mat-card-title>
+  </mat-card-header>
+  
+  <mat-card-content>
+    <form [formGroup]="insuranceForm" (ngSubmit)="addInsurance()" class="insurance-form">
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="insurance-input">
+          <mat-label>Insurance name</mat-label>
+          <input matInput formControlName="name" placeholder="Add new insurance...">
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline" class="price-select">
+          <mat-label>Price</mat-label>
+          <input matInput formControlName="price" placeholder="Add Price...">
+        </mat-form-field>
+      </div>
+      
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="date-picker">
+          <mat-label>Expiration</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="dueDate">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        
+        <button mat-flat-button color="primary" type="submit" class="add-button">
+          {{ editingInsurance ? 'Update Insurance' : 'Add Insurance' }}
+        </button>
+        <button mat-stroked-button color="warn" type="button" class="add-button" *ngIf="editingInsurance" (click)="cancelEdit()">Cancel</button>
+      </div>
+      
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Description (optional)</mat-label>
+        <textarea matInput formControlName="description" rows="2"></textarea>
+      </mat-form-field>
+    </form>
+    
+    <div class="table-container">
+      <table mat-table [dataSource]="insurances" class="insurance-table">
+        <!-- <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let insurance">
+            <mat-checkbox 
+              [checked]="insurance.completed" 
+              (change)="toggleInsuranceStatus(insurance)"
+              color="primary">
+            </mat-checkbox>
+          </td>
+        </ng-container> -->
+        
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Insurance Name</th>
+          <td mat-cell *matCellDef="let insurance" [class.completed]="insurance.completed">
+            <div>{{ insurance.name }}</div>
+            <div class="insurance-description">{{ insurance.description }}</div>
+          </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef>Price</th>
+          <td mat-cell *matCellDef="let insurance">
+            <span class="price-chip {{ insurance.price >= 50000 ? 'high' : insurance.price >= 30000 ? 'medium' : 'low' }}">
+              {{ insurance.price | priceFormatter }}
+            </span>
+          </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="dueDate">
+          <th mat-header-cell *matHeaderCellDef>Expiration Date</th>
+          <td mat-cell *matCellDef="let insurance">
+            {{ insurance.dueDate | date:'yyyy-MM-dd' }}
+          </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Edit</th>
+          <td mat-cell *matCellDef="let insurance">
+            <button mat-icon-button color="primary" (click)="startEdit(insurance)" aria-label="Edit insurance">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+        
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="5">No insurances available</td>
+        </tr>
+      </table>
+    </div>
+  </mat-card-content>
+</mat-card>

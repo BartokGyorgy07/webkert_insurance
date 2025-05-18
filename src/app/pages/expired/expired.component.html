@@ -1,0 +1,43 @@
+<div class="expired-container">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Active Insurances</mat-card-title>
+        <div class="spacer"></div>
+        <button mat-raised-button color="warn" 
+                [disabled]="activeInsurances.length === 0 || isLoading"
+                (click)="clearAllInsurances()">
+          <mat-icon>delete_sweep</mat-icon> Clear All
+        </button>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <table mat-table [dataSource]="activeInsurances" class="mat-elevation-z2">
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Insurance Name</th>
+            <td mat-cell *matCellDef="let insurance">{{insurance.name}}</td>
+          </ng-container>
+          
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef>Expiration Date</th>
+            <td mat-cell *matCellDef="let insurance">{{ insurance.dueDate | dateFormatter }}</td>
+          </ng-container>
+          
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let insurance; let i = index">
+              <button mat-icon-button color="warn" (click)="deleteInsurance(i)" aria-label="Delete insurance" [disabled]="isLoading">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No active insurances</td>
+          </tr>
+        </table>
+      </mat-card-content>
+    </mat-card>
+</div>
